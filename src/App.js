@@ -7,6 +7,7 @@ function App() {
 
   const [timeLeft, setTimeLeft] = useState(5 * 60)
   const [isCounting, setIsCounting] = useState(false)
+  const [timeStarted, setTimeStarted] = useState(timeLeft)
 
   const time = new TimeHandler(timeLeft)
 
@@ -31,27 +32,34 @@ function App() {
   const handleReset = () => {
     setIsCounting(false)
     setTimeLeft(5 * 60)
+    setTimeStarted(5 * 60)
   }
 
   const handleIncrease = (timeValue) => {
     setTimeLeft((prev) => {
       if (prev + timeValue > 24 * 3600) {
+        setTimeStarted(24 * 3600)
         return 24 * 3600
       }
+      setTimeStarted(prev + timeValue)
       return prev + timeValue
     })
   }
   const handleDecrease = (timeValue) => {
     setTimeLeft((prev) => {
       if ((prev - timeValue) >= 0) {
+        setTimeStarted(prev - timeValue)
         return prev - timeValue
       }
+      setTimeStarted(0)
       return 0
     })
+
   }
 
   const setTimer = (timeValue) => {
     setTimeLeft(timeValue)
+    setTimeStarted(timeValue)
   }
 
   return (
@@ -66,6 +74,8 @@ function App() {
         time={time}
         isCounting={isCounting}
         setTimer={setTimer}
+        timeStarted={timeStarted}
+        timeLeft={timeLeft}
       />
     </div>
   );
